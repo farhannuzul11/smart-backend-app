@@ -2,8 +2,11 @@ from langchain_ollama import ChatOllama
 from langchain.tools import tool
 from langchain.agents import initialize_agent, AgentType
 
-# Define the LLM
-llm = ChatOllama(model="qwen2.5:3b")
+from fastapi import FastAPI, Request
+from pydantic import BaseModel
+
+
+
 
 # Define some tools
 
@@ -22,8 +25,10 @@ def calculator_tool(input: str) -> str:
         return str(eval(input))
     except Exception:
         return "Invalid math expression."
-    
-# Initialize the agent with the tools
+
+# LLM and Agent Setup
+llm = ChatOllama(model="qwen2.5:3b")
+
 tools = [weather_tool, calculator_tool]
 
 agent = initialize_agent(
@@ -33,15 +38,27 @@ agent = initialize_agent(
     verbose=True
 )
 
-if __name__ == "__main__":
-    queries = [
-        "What is 12 * 7?",
-        "What's the weather in Paris today?",
-        "Who is the president of France?"
-    ]
+# FastAPI Setup
+app = FastAPI()
 
-    for query in queries:
-        print(f"Query: {query}")
-        response = agent.run(query)
-        print(f"Response: {response}\n")
-        print("-----")
+
+class QueryInput(BaseModel):
+    query: str
+
+@app.post("/ask")
+async def ask_question(data: QueryInput):
+    response = agent.run(data.query)
+    return {"response": response}
+
+# if __name__ == "__main__":
+#     queries = [
+#         "What is 12 * 7?",
+#         "What's the weather in Paris today?",
+#         "Who is the president of France?"
+#     ]
+
+#     for query in queries:
+#         print(f"Query: {query}")
+#         response = agent.run(query)
+#         print(f"Response: {response}\n")
+#         print("-----")
