@@ -114,7 +114,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 
                 # Process with agent
                 try:
-                    response = agent.invoke(query)
+                    response = agent.run(query)
                     
                     # Send final result
                     await manager.send_json_message({
@@ -167,3 +167,9 @@ async def health_check():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+# Build the Docker image
+# Run: sudo docker build -t my-fastapi-app .
+
+# Run the container
+# Run: sudo docker run --network host my-fastapi-app
