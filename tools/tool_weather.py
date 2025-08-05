@@ -1,57 +1,38 @@
 import requests
-from typing import Optional
+import os
+from dotenv import load_dotenv
 from langchain.tools import tool # Learn about this library later
 
-API_KEY = "2e551eddc221109dc3c74d277f3df41d"
+load_dotenv()
+
+API_KEY = os.getenv("WEATHER_API_KEY")
 
 @tool
 def weather_tool(city: str) -> str:
-    """Get the current weather information for a given city.
-
-    This tool queries a weather API to retrieve current weather details 
-    (temperature, humidity, and weather condition) for the specified city. 
-    You can specify the temperature unit as either "Celsius" or "Fahrenheit".
+    """
+    Get current weather for a city using OpenWeather API.
 
     Parameters:
-        city (str): Name of the city to get the weather for.
-        unit (str, optional): Unit of temperature. Accepts "Celsius" or "Fahrenheit".
-                              Defaults to "Celsius".
+        city (str): City name.
 
     Returns:
-        str: A human-readable summary of the current weather, such as:
-             "In Jakarta, it is currently 31°C with clear skies and 70% humidity."
+        str: Weather summary like
+        "It's 25°C with clear skies in Jakarta."
 
-    Example:
-        >>> get_current_weather("Jakarta", unit="Celsius")
-        "In Jakarta, it is currently 31°C with clear skies and 70% humidity."
+    Usage:
+        Ask about current weather or travel info.
 
     Notes:
-        - Ensure your system is connected to the internet.
-        - The accuracy depends on the external weather API used.
-
-    Category:
-        Weather Tool
-
-    Capabilities:
-        - Informational
-        - Stateless
-        - Deterministic output (no randomness)
-
-    Ideal for:
-        - User queries about current weather
-        - Travel apps or trip planners
-        - Daily assistant summaries
+        Requires internet and a valid API key.
     """
-    # find the meaning why using """
 
     try:
-        base_url = "http://api.openweathermap.org/data/2.5/weather"
+        base_url = "https://api.openweathermap.org/data/2.5/weather"
         params ={
             "q": city,
             "appid": API_KEY,
             "units": "metric"
         }
-        # Still dont understand this part
         response = requests.get(base_url, params=params)
         response.raise_for_status()  # Raise an error for bad responses
 

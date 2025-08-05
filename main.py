@@ -5,6 +5,8 @@ from tools.tool_weather import weather_tool
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles  # Add this import
 from pydantic import BaseModel
+from fastapi.responses import RedirectResponse
+import warnings
 import json
 import asyncio
 import re
@@ -14,7 +16,10 @@ app = FastAPI()
 class QueryInput(BaseModel):
     query: str
 
-# Initialize your existing components
+# Suppress specific warnings
+warnings.filterwarnings("ignore")
+
+# Initialize existing components
 llm = get_llm()
 tools = [calculator_tool, weather_tool]
 agent = create_agent(llm, tools)
@@ -22,9 +27,10 @@ agent = create_agent(llm, tools)
 # Serve static files (HTML, CSS, JS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Your existing HTTP endpoint (keep this!)
+
+# Existing tool inference logic
 def infer_tool_from_query(query: str):
-    """Your existing tool inference logic"""
+    """Infer which tool to use based on the query content."""
     query_lower = query.lower()
     
     if any(keyword in query_lower for keyword in ['weather', 'temperature', 'forecast', 'rain', 'sunny', 'cloudy']):
@@ -39,9 +45,9 @@ def infer_tool_from_query(query: str):
         return "llm"
 
 @app.post("/query")
-async def query_tool(data: QueryInput):
-    """Your existing HTTP endpoint - keep this for compatibility"""
-    response = agent.run(data.query)
+async def query_tool(data: QueryInput): # Still don't understand this part
+    """Existing HTTP endpoint - keep this for compatibility"""
+    response = agent.run(data.query) #Library
     tool_used = infer_tool_from_query(data.query)
     
     return {
@@ -78,12 +84,13 @@ async def websocket_endpoint(websocket: WebSocket):
     
     try:
         while True:
-            # Receive message from client
-            data = await websocket.receive_text()
+            # Receive message from client forever
+            data = await websocket.receive_text() 
             
             try:
                 query_data = json.loads(data)
                 query = query_data.get("query", "").strip()
+                request_id = query_data.get("request_id", None)
                 
                 if not query:
                     await manager.send_json_message({
@@ -96,7 +103,8 @@ async def websocket_endpoint(websocket: WebSocket):
                 await manager.send_json_message({
                     "type": "status",
                     "message": "Processing your query...",
-                    "query": query
+                    "query": query,
+                    "request_id": request_id
                 }, websocket)
                 
                 # Determine which tool will be used
@@ -106,7 +114,8 @@ async def websocket_endpoint(websocket: WebSocket):
                     await manager.send_json_message({
                         "type": "status", 
                         "message": f"Using {tool_to_use.replace('_', ' ')}...",
-                        "tool": tool_to_use
+                        "tool": tool_to_use,
+                        "request_id": request_id
                     }, websocket)
                 
                 # Add small delay for better UX
@@ -122,19 +131,22 @@ async def websocket_endpoint(websocket: WebSocket):
                         "query": query,
                         "tool_used": tool_to_use,
                         "result": response,
-                        "status": "completed"
+                        "status": "completed",
+                        "request_id": request_id
                     }, websocket)
                     
                 except Exception as e:
                     await manager.send_json_message({
                         "type": "error",
-                        "message": f"Error processing query: {str(e)}"
+                        "message": f"Error processing query: {str(e)}",
+                        "request_id": request_id
                     }, websocket)
                     
             except json.JSONDecodeError:
                 await manager.send_json_message({
                     "type": "error",
-                    "message": "Invalid JSON format"
+                    "message": "Invalid JSON format",
+                    "request_id": request_id
                 }, websocket)
                 
     except WebSocketDisconnect:
@@ -148,8 +160,7 @@ async def websocket_endpoint(websocket: WebSocket):
 @app.get("/")
 async def read_root():
     """Redirect to the HTML file"""
-    from fastapi.responses import RedirectResponse
-    return RedirectResponse(url="/static/index.html")
+    return RedirectResponse(url="/static/web.html")
 
 # Health check endpoint
 @app.get("/health")
@@ -167,3 +178,9 @@ async def health_check():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+# Build the Docker image
+# Run: sudo docker build -t my-fastapi-app .
+
+# Run the container
+# Run: sudo docker run --network host my-fastapi-app
