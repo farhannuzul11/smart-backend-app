@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLM WebSocket Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        input[type="text"] { 
+            flex: 1;
+            min-width: 300px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        button { 
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #da190b;
+        }
+        
+        #messages { 
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            height: 400px; 
+            overflow-y: auto; 
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #fafafa;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.5;
+        }
+        
+        .examples-section {
+            margin-top: 20px;
+        }
+        
+        .examples-section h3 {
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .example-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-example {
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 20px;
+            font-size: 14px;
+        }
+        
+        .btn-example:hover {
+            background-color: #0b7dda;
+        }
+        
+        .status { 
+            color: #666; 
+            font-style: italic;
+            background-color: #f0f8ff;
+            padding: 8px;
+            border-left: 4px solid #2196F3;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        
+        .result { 
+            color: #008000; 
+            font-weight: bold;
+            background-color: #f0fff0;
+            padding: 8px;
+            border-left: 4px solid #4CAF50;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        
+        .error { 
+            color: #ff0000;
+            background-color: #fff0f0;
+            padding: 8px;
+            border-left: 4px solid #f44336;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        
+        .user-message {
+            background-color: #e3f2fd;
+            padding: 8px;
+            border-left: 4px solid #2196F3;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+        
+        .connected {
+            background-color: #4CAF50;
+        }
+        
+        .disconnected {
+            background-color: #f44336;
+        }
+        
+        small {
+            color: #888;
+        }
+        
+        @media (max-width: 768px) {
+            .input-section {
+                flex-direction: column;
+            }
+            
+            input[type="text"] {
+                min-width: 100%;
+            }
+            
+            .example-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-example {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 LLM Tool Integration - WebSocket Test</h1>
+        
+        <div class="input-section">
+            <input type="text" id="messageInput" placeholder="Ask something... (e.g., What is 12 * 7?)" />
+            <button class="btn-primary" onclick="sendMessage()">Send</button>
+            <button class="btn-secondary" onclick="clearMessages()">Clear</button>
+        </div>
+        
+        <div id="messages"></div>
+        
+        <div class="examples-section">
+            <h3>💡 Try these examples:</h3>
+            <div class="example-buttons">
+                <button class="btn-example" onclick="sendExample('What is 25 * 4?')">📊 Math Question</button>
+                <button class="btn-example" onclick="sendExample('What is the weather in Jakarta?')">🌤️ Weather Question</button>
+                <button class="btn-example" onclick="sendExample('What is the capital of Indonesia?')">🧠 General Question</button>
+                <button class="btn-example" onclick="sendExample('Calculate 150 + 75')">🔢 Calculate</button>
+                <button class="btn-example" onclick="sendExample('Temperature in Bali')">🌡️ Temperature</button>
+                <button class="btn-example" onclick="sendExample('Solve 144 / 12')">➗ Division</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="connectionStatus" class="connection-status disconnected">🔴 Disconnected</div>
+
+    <script>
+        let ws;
+        const messages = document.getElementById('messages');
+        const connectionStatus = document.getElementById('connectionStatus');
+        
+        function connectWebSocket() {
+            ws = new WebSocket("ws://localhost:8000/ws");
+            
+            ws.onopen = function() {
+                console.log('WebSocket connected');
+                connectionStatus.textContent = '🟢 Connected';
+                connectionStatus.className = 'connection-status connected';
+                
+                addMessage('status', '🔗 Connected to WebSocket', new Date().toLocaleTimeString());
+            };
+            
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                const timestamp = new Date().toLocaleTimeString();
+                
+                let messageType = '';
+                let prefix = '';
+                let content = '';
+                
+                switch(data.type) {
+                    case 'status':
+                        messageType = 'status';
+                        prefix = '⏳ ';
+                        content = data.message;
+                        if (data.tool) {
+                            content += ` (${data.tool})`;
+                        }
+                        break;
+                    case 'result':
+                        messageType = 'result';
+                        prefix = '✅ ';
+                        content = `Result: ${data.result}`;
+                        if (data.tool_used) {
+                            content += `\nTool Used: ${data.tool_used}`;
+                        }
+                        break;
+                    case 'error':
+                        messageType = 'error';
+                        prefix = '❌ ';
+                        content = `Error: ${data.message}`;
+                        break;
+                    default:
+                        messageType = 'status';
+                        prefix = '📝 ';
+                        content = JSON.stringify(data);
+                }
+                
+                addMessage(messageType, prefix + content, timestamp);
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket disconnected');
+                connectionStatus.textContent = '🔴 Disconnected';
+                connectionStatus.className = 'connection-status disconnected';
+                
+                addMessage('error', '❌ Disconnected from WebSocket', new Date().toLocaleTimeString());
+                
+                // Try to reconnect after 3 seconds
+                setTimeout(connectWebSocket, 3000);
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+                addMessage('error', '❌ WebSocket connection error', new Date().toLocaleTimeString());
+            };
+        }
+        
+        function addMessage(type, content, timestamp) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type;
+            messageDiv.innerHTML = `<small>[${timestamp}]</small> ${content}`;
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message && ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({query: message}));
+                
+                // Show user message
+                addMessage('user-message', `👤 You: ${message}`, new Date().toLocaleTimeString());
+                
+                input.value = '';
+            } else if (!ws || ws.readyState !== WebSocket.OPEN) {
+                addMessage('error', '❌ WebSocket not connected. Please wait for reconnection.', new Date().toLocaleTimeString());
+            }
+        }
+        
+        function sendExample(query) {
+            document.getElementById('messageInput').value = query;
+            sendMessage();
+        }
+        
+        function clearMessages() {
+            messages.innerHTML = '';
+            addMessage('status', '🧹 Messages cleared', new Date().toLocaleTimeString());
+        }
+        
+        // Send message on Enter key
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Initialize WebSocket connection when page loads
+        window.addEventListener('load', function() {
+            connectWebSocket();
+        });
+        
+        // Handle page visibility change
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible' && (!ws || ws.readyState !== WebSocket.OPEN)) {
+                connectWebSocket();
+            }
+        });
+    </script>
+</body>
+</html>
