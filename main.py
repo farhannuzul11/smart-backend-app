@@ -5,6 +5,8 @@ from tools.tool_weather import weather_tool
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles  # Add this import
 from pydantic import BaseModel
+from fastapi.responses import RedirectResponse
+import warnings
 import json
 import asyncio
 import re
@@ -14,7 +16,10 @@ app = FastAPI()
 class QueryInput(BaseModel):
     query: str
 
-# Initialize your existing components
+# Suppress specific warnings
+warnings.filterwarnings("ignore")
+
+# Initialize existing components
 llm = get_llm()
 tools = [calculator_tool, weather_tool]
 agent = create_agent(llm, tools)
@@ -22,9 +27,10 @@ agent = create_agent(llm, tools)
 # Serve static files (HTML, CSS, JS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Your existing HTTP endpoint (keep this!)
+
+# Existing tool inference logic
 def infer_tool_from_query(query: str):
-    """Your existing tool inference logic"""
+    """Infer which tool to use based on the query content."""
     query_lower = query.lower()
     
     if any(keyword in query_lower for keyword in ['weather', 'temperature', 'forecast', 'rain', 'sunny', 'cloudy']):
@@ -39,9 +45,9 @@ def infer_tool_from_query(query: str):
         return "llm"
 
 @app.post("/query")
-async def query_tool(data: QueryInput):
-    """Your existing HTTP endpoint - keep this for compatibility"""
-    response = agent.run(data.query)
+async def query_tool(data: QueryInput): # Still don't understand this part
+    """Existing HTTP endpoint - keep this for compatibility"""
+    response = agent.run(data.query) #Library
     tool_used = infer_tool_from_query(data.query)
     
     return {
@@ -78,8 +84,8 @@ async def websocket_endpoint(websocket: WebSocket):
     
     try:
         while True:
-            # Receive message from client
-            data = await websocket.receive_text()
+            # Receive message from client forever
+            data = await websocket.receive_text() 
             
             try:
                 query_data = json.loads(data)
@@ -154,8 +160,7 @@ async def websocket_endpoint(websocket: WebSocket):
 @app.get("/")
 async def read_root():
     """Redirect to the HTML file"""
-    from fastapi.responses import RedirectResponse
-    return RedirectResponse(url="/static/index.html")
+    return RedirectResponse(url="/static/web.html")
 
 # Health check endpoint
 @app.get("/health")
