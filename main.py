@@ -84,6 +84,7 @@ async def websocket_endpoint(websocket: WebSocket):
             try:
                 query_data = json.loads(data)
                 query = query_data.get("query", "").strip()
+                request_id = query_data.get("request_id", None)
                 
                 if not query:
                     await manager.send_json_message({
@@ -96,7 +97,8 @@ async def websocket_endpoint(websocket: WebSocket):
                 await manager.send_json_message({
                     "type": "status",
                     "message": "Processing your query...",
-                    "query": query
+                    "query": query,
+                    "request_id": request_id
                 }, websocket)
                 
                 # Determine which tool will be used
@@ -106,7 +108,8 @@ async def websocket_endpoint(websocket: WebSocket):
                     await manager.send_json_message({
                         "type": "status", 
                         "message": f"Using {tool_to_use.replace('_', ' ')}...",
-                        "tool": tool_to_use
+                        "tool": tool_to_use,
+                        "request_id": request_id
                     }, websocket)
                 
                 # Add small delay for better UX
@@ -122,19 +125,22 @@ async def websocket_endpoint(websocket: WebSocket):
                         "query": query,
                         "tool_used": tool_to_use,
                         "result": response,
-                        "status": "completed"
+                        "status": "completed",
+                        "request_id": request_id
                     }, websocket)
                     
                 except Exception as e:
                     await manager.send_json_message({
                         "type": "error",
-                        "message": f"Error processing query: {str(e)}"
+                        "message": f"Error processing query: {str(e)}",
+                        "request_id": request_id
                     }, websocket)
                     
             except json.JSONDecodeError:
                 await manager.send_json_message({
                     "type": "error",
-                    "message": "Invalid JSON format"
+                    "message": "Invalid JSON format",
+                    "request_id": request_id
                 }, websocket)
                 
     except WebSocketDisconnect:
