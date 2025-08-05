@@ -114,7 +114,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 
                 # Process with agent
                 try:
-                    response = agent.run(query)
+                    response = agent.invoke(query)
                     
                     # Send final result
                     await manager.send_json_message({
