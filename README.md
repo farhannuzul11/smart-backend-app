@@ -17,7 +17,7 @@
     - Static web interface
 
 ## - System Architecture
-![my-backend-app-architectue](https://github.com/user-attachments/assets/57fd6147-bbf2-4815-b243-17a42743f72e)
+<img width="740" height="600" alt="my-backend-app-architectue drawio" src="https://github.com/user-attachments/assets/2acb5997-243e-4664-b409-c562ac1d0c9b" />
 
 This diagram shows how the user input is processed:
 
