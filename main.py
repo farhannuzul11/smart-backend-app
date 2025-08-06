@@ -162,19 +162,6 @@ async def read_root():
     """Redirect to the HTML file"""
     return RedirectResponse(url="/static/web.html")
 
-# Health check endpoint
-@app.get("/health")
-async def health_check():
-    return {
-        "status": "healthy",
-        "message": "LLM Tool Integration API is running",
-        "endpoints": {
-            "http": "/query",
-            "websocket": "/ws", 
-            "web_interface": "/static/index.html"
-        }
-    }
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

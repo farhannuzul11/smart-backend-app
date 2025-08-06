@@ -2,7 +2,6 @@ import requests
 import os
 from dotenv import load_dotenv
 from langchain.tools import tool # Learn about this library later
-
 load_dotenv()
 
 API_KEY = os.getenv("WEATHER_API_KEY")
