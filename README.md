@@ -30,7 +30,7 @@ This diagram shows how the user input is processed:
 
 -   **FastAPI** – REST & WebSocket backend
 -   **LangChain** – Agent orchestration and tool calling
--   **Ollama** – Local LLM (qwen2.5:3b)
+-   **Ollama** – Local LLM (runs the `qwen2.5:3b` model)
 -   **OpenWeatherMap API** – For weather tool
 -   **Docker** – Containerized deployment
 -   **Static Frontend** - Interact with AI via web interface
@@ -40,7 +40,7 @@ This diagram shows how the user input is processed:
 - ✅ /query POST endpoint for API requests 
 - ✅ WebSocket /ws streaming support
 - ✅ Three tools:
-    - LLM: Local answer generation (via Ollama)
+    - LLM: Local answer generation via Ollama running the `qwen2.5:3b` model
     - Weather: Calls OpenWeather API
     - Math: Performs calculation
 - ✅ '.env 'config for sensitive values
