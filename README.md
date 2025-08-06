@@ -1,8 +1,8 @@
 # 🧠 Natural Language Tool Router (Coding Challenge)
 
 > **Author**: Farhan Nuzul  
-> **Challenge from**: Manoo Assa 
-> **Date**: August 2025
+> **Challenge from**: Manoo Assa
+> > **Date**: August 2025
 > > **About**: This project builds a small backend app that routes natural language commands to the correct tool (Weather, Calculator, or LLM) and returns structured results. I also includes a simple static frontend and allowing users to interact with the AI directly via a web interface.
 
 <img width="1804" height="1001" alt="image" src="https://github.com/user-attachments/assets/89f3a3e9-ea7c-4731-9adb-466c750fc898" />
