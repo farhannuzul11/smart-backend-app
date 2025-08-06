@@ -179,6 +179,10 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
+## Run with FastAPI
+# Run: uvicorn main:app --reload
+
+## Run with Docker
 # Build the Docker image
 # Run: sudo docker build -t my-fastapi-app .
 
