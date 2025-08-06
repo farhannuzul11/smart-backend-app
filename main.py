@@ -3,7 +3,7 @@ from llm.ollama_llm import get_llm
 from tools.tool_calculator import calculator_tool
 from tools.tool_weather import weather_tool
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.staticfiles import StaticFiles  # Add this import
+from fastapi.staticfiles import StaticFiles 
 from pydantic import BaseModel
 from fastapi.responses import RedirectResponse
 import warnings
@@ -44,10 +44,11 @@ def infer_tool_from_query(query: str):
     else:
         return "llm"
 
+# HTTP POST endpoint that accepts user queries
 @app.post("/query")
-async def query_tool(data: QueryInput): # Still don't understand this part
+async def query_tool(data: QueryInput):
     """Existing HTTP endpoint - keep this for compatibility"""
-    response = agent.run(data.query) #Library
+    response = agent.run(data.query)
     tool_used = infer_tool_from_query(data.query)
     
     return {

@@ -1,7 +1,7 @@
 import requests
 import os
 from dotenv import load_dotenv
-from langchain.tools import tool # Learn about this library later
+from langchain.tools import tool 
 load_dotenv()
 
 API_KEY = os.getenv("WEATHER_API_KEY")
@@ -33,10 +33,10 @@ def weather_tool(city: str) -> str:
             "units": "metric"
         }
         response = requests.get(base_url, params=params)
-        response.raise_for_status()  # Raise an error for bad responses
+        response.raise_for_status()
 
         data = response.json()
-        weather = data["weather"][0]["description"] #Still dont understand this part
+        weather = data["weather"][0]["description"]
         temperature = data["main"]["temp"]
 
         return f"[weather] It's {temperature}°C with {weather} in {city}."
