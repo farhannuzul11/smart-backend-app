@@ -1,5 +1,3 @@
-<img width="816" height="237" alt="image" src="https://github.com/user-attachments/assets/c9dc4bdf-a536-4239-8928-73661c6fbff7" /><img width="816" height="237" alt="image" src="https://github.com/user-attachments/assets/6a2d2ac4-0159-465d-9f91-388387c0b8aa" /># 🧠 Natural Language Tool Router (Coding Challenge)
-
 > **Author**: Farhan Nuzul  
 > **Challenge from**: Manoo Assa 
 > **Date**: August 2025
