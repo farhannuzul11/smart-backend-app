@@ -37,15 +37,15 @@ This diagram shows how the user input is processed:
 
 ## - Features
 
-✅ /query POST endpoint for API requests 
-✅ WebSocket /ws streaming support
-✅ Three tools:
+- ✅ /query POST endpoint for API requests 
+- ✅ WebSocket /ws streaming support
+- ✅ Three tools:
     - LLM: Local answer generation (via Ollama)
     - Weather: Calls OpenWeather API
     - Math: Performs calculation
-✅ '.env 'config for sensitive values
-✅ Dockerized and ready to deploy
-✅ Static frontend: Easy to use via browser
+- ✅ '.env 'config for sensitive values
+- ✅ Dockerized and ready to deploy
+- ✅ Static frontend: Easy to use via browser
 
 ## - Setup and Deployment
 
@@ -124,9 +124,13 @@ curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"  
 ### Websocket (Bonus)
 - Connecting:' ws://localhost:8000/ws'
 - Testing it with Postman
+
 **Example Request**
+  
 <img width="508" height="298" alt="image" src="https://github.com/user-attachments/assets/18dc6661-219d-4e59-aaa7-09f4e1131c46" />
-**Example Response**
+
+**Response**
+
 <img width="1434" height="393" alt="image" src="https://github.com/user-attachments/assets/8e117a08-84ee-4dd5-a866-42ccf7e6c4ca" />
 
 
