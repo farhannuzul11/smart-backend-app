@@ -1,18 +1,11 @@
----
-title: CODING CHALLENGE
-
----
-
-
-# 🧠 Natural Language Tool Router (Coding Challenge)
+<img width="816" height="237" alt="image" src="https://github.com/user-attachments/assets/c9dc4bdf-a536-4239-8928-73661c6fbff7" /><img width="816" height="237" alt="image" src="https://github.com/user-attachments/assets/6a2d2ac4-0159-465d-9f91-388387c0b8aa" /># 🧠 Natural Language Tool Router (Coding Challenge)
 
 > **Author**: Farhan Nuzul  
 > **Challenge from**: Manoo Assa 
 > **Date**: August 2025
 > > **About**: This project builds a small backend app that routes natural language commands to the correct tool (Weather, Calculator, or LLM) and returns structured results. I also includes a simple static frontend and allowing users to interact with the AI directly via a web interface.
 
-![image](https://hackmd.io/_uploads/rkkgSPedgg.png)
-
+<img width="1804" height="1001" alt="image" src="https://github.com/user-attachments/assets/89f3a3e9-ea7c-4731-9adb-466c750fc898" />
 
 ## - Objective
 
@@ -25,7 +18,7 @@ title: CODING CHALLENGE
     - Static web interface
 
 ## - System Architecture
-![my-backend-app-architectue](https://hackmd.io/_uploads/H163qLldgg.jpg)
+![my-backend-app-architectue](https://github.com/user-attachments/assets/57fd6147-bbf2-4815-b243-17a42743f72e)
 
 This diagram shows how the user input is processed:
 
@@ -55,7 +48,7 @@ This diagram shows how the user input is processed:
 ✅ Dockerized and ready to deploy
 ✅ Static frontend: Easy to use via browser
 
-## Setup and Deployment
+## - Setup and Deployment
 
 ### Requirements
 
@@ -110,7 +103,8 @@ Visit: http://localhost:8000
 curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"   -d '{"query":"What is 12 * 7?"}' | jq
 ```
 **Response**:
-![image](https://hackmd.io/_uploads/H1S7mvgOll.png)
+<img width="816" height="237" alt="image" src="https://github.com/user-attachments/assets/045eff87-c1fc-4586-8099-382213f20171" />
+
 
 ### ✅ Sample 2 – Weather Tool
 **Request**:
@@ -118,29 +112,30 @@ curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"  
 curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"   -d '{"query":"What’s the weather today in Taipei?"}' | jq
 ```
 **Response**:
-![image](https://hackmd.io/_uploads/BJsQNPxOxl.png)
-
+<img width="810" height="225" alt="image" src="https://github.com/user-attachments/assets/ee691fae-206b-4de0-8f27-dcc236ca874b" />
 
 ### ✅ Sample 3 – LLM Tool
 **Request**:
 ```
-curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"   -d '{"query":"What’s the weather today in Taipei?"}' | jq
+curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"   -d '{"query":"Who is the president of France?"}' | jq
 ```
 **Response**:
-![image](https://hackmd.io/_uploads/HkHsVDgdgx.png)
+<img width="811" height="292" alt="image" src="https://github.com/user-attachments/assets/99927593-5837-47a6-8286-6c0ad194e537" />
 
 ### Websocket (Bonus)
 - Connecting:' ws://localhost:8000/ws'
 - Testing it with Postman
 **Example Request**
-![image](https://hackmd.io/_uploads/BktIsvxuxx.png)
+<img width="508" height="298" alt="image" src="https://github.com/user-attachments/assets/18dc6661-219d-4e59-aaa7-09f4e1131c46" />
 **Example Response**
-![image](https://hackmd.io/_uploads/H1n93wldll.png)
+<img width="1434" height="393" alt="image" src="https://github.com/user-attachments/assets/8e117a08-84ee-4dd5-a866-42ccf7e6c4ca" />
+
 
 ### AI Web Interface
 The static frontend allows users to interact with the app via browser (JavaScript-based). It communicates with /ws WebSocket endpoint in real-time.
 Visit: http://localhost:8000
-![image](https://hackmd.io/_uploads/Hk9SCul_eg.png)
+<img width="1799" height="1001" alt="image" src="https://github.com/user-attachments/assets/a4898a23-648c-44c7-bc5e-0833c6c6958e" />
+
 
 
 
