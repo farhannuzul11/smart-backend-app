@@ -102,6 +102,7 @@ Visit: http://localhost:8000
 curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"   -d '{"query":"What is 12 * 7?"}' | jq
 ```
 **Response**:
+
 <img width="816" height="237" alt="image" src="https://github.com/user-attachments/assets/045eff87-c1fc-4586-8099-382213f20171" />
 
 
@@ -111,6 +112,7 @@ curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"  
 curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"   -d '{"query":"What’s the weather today in Taipei?"}' | jq
 ```
 **Response**:
+
 <img width="810" height="225" alt="image" src="https://github.com/user-attachments/assets/ee691fae-206b-4de0-8f27-dcc236ca874b" />
 
 ### ✅ Sample 3 – LLM Tool
@@ -119,6 +121,7 @@ curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"  
 curl -X POST http://127.0.0.1:8000/query   -H "Content-Type: application/json"   -d '{"query":"Who is the president of France?"}' | jq
 ```
 **Response**:
+
 <img width="811" height="292" alt="image" src="https://github.com/user-attachments/assets/99927593-5837-47a6-8286-6c0ad194e537" />
 
 ### Websocket (Bonus)
